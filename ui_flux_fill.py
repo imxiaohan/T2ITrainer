@@ -624,6 +624,9 @@ def update_language_interface():
         gr.Button(get_text('load'), scale=1, variant="primary"),  # 加载按钮
         gr.Button(get_text('save'), scale=1, variant="secondary"),  # 下载按钮
         gr.File(label=get_text('download_link'), visible=False),  # 下载链接组件
+        gr.Accordion(label=get_text('directory_section')),  # 目录配置折叠面板
+        gr.Accordion(label=get_text('lora_config')),  # LoRA配置折叠面板
+        gr.Accordion(label=get_text('misc')),  # 杂项折叠面板
         # 目录设置部分的组件
         gr.Textbox(label=get_text('output_dir'), value=page_config["output_dir"], placeholder=get_text('output_dir_placeholder')),  # 输出目录
         gr.Textbox(label=get_text('save_name'), value=page_config["save_name"], placeholder=get_text('save_name_placeholder')),  # 保存名称
@@ -884,6 +887,7 @@ with gr.Blocks(css=css_code) as demo:
         inputs=[],
         outputs=[
             title_md, refresh_config_btn, language_toggle_btn, script, config_path, load_config_btn, download_btn, download_file,
+            directory_accordion, lora_accordion, misc_accordion,
             output_dir, save_name, pretrained_model_name_or_path, resume_from_checkpoint, 
             train_data_dir, model_path, report_to,
             rank, train_batch_size, repeats, gradient_accumulation_steps, mixed_precision, gradient_checkpointing,
