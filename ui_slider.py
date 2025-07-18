@@ -84,7 +84,7 @@ default_config = {
     "use_dora":False,
     "recreate_cache":False,
     "caption_dropout":0.1,
-    "config_path":"config_slider.json",
+    "config_path":"configs/default/kolors_slider_default_config.json",
     # "resolution":"1024",
     # "resolution_choices":["1024","2048"],
     # 'use_debias':False,
@@ -201,7 +201,7 @@ def load_config(config_path):
     if not config_path.endswith(".json"):
         print("!!!File is not json format.")
         print("Load default config")
-        config_path = "config_slider.json"
+        config_path = "configs/default/kolors_slider_default_config.json"
     if not os.path.exists(config_path):
         # create config
         with open(config_path, 'w') as f:
@@ -216,7 +216,7 @@ def load_config(config_path):
         with open(config_path, 'r') as f:
             config = json.load(f)
     except:
-        config_path = "config_slider.json"
+        config_path = "configs/default/kolors_slider_default_config.json"
     print(f"Loaded configuration from {config_path}")
     for key in config:
         if key in config_keys:
@@ -245,8 +245,8 @@ def load_config(config_path):
             # default_config['skip_step'],default_config['gradient_checkpointing'],default_config['validation_ratio'], \
             # default_config['resolution'], default_config['snr_gamma'], \
 
-# load config.json by default
-load_config("config_slider.json")
+# 默认加载
+load_config("configs/default/kolors_slider_default_config.json")
 
 def gen(
     pretrained_model_name_or_path,

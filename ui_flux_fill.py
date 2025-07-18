@@ -185,9 +185,9 @@ current_language = 'en'
 
 # 从配置文件加载默认配置
 def load_default_config():
-    """从default_config.json加载默认配置"""
+    """从 configs/default/flux_lora_default_config.json 加载默认配置"""
     try:
-        with open("default_config.json", 'r', encoding='utf-8') as f:
+        with open("configs/default/flux_lora_default_config.json", 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
         print(f"Error loading default config: {e}")
@@ -199,7 +199,7 @@ def load_default_config():
                 "train_flux_lora_ui_with_mask.py",
                 "train_flux_lora_ui.py"
             ],
-            "config_path": "default_config.json"
+            "config_path": "configs/default/flux_lora_default_config.json"
         }
 
 # 加载默认配置
@@ -209,6 +209,8 @@ default_config = load_default_config()
 
 # 页面初始化配置 - 使用默认配置
 page_config = default_config
+# 修改 config_path 的默认值
+page_config["config_path"] = "configs/default/flux_lora_default_config.json"
 
 # 获取当前语言的文本
 def get_text(key):
