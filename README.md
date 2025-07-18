@@ -36,7 +36,9 @@ Recommended Method
 ```bash
   git clone https://github.com/lrzjason/T2ITrainer.git
   cd T2ITrainer
-  setup.bat
+  scripts/setup.bat  # Windows
+  # 或
+  chmod +x scripts/setup.sh && scripts/setup.sh  # Linux/macOS
 ```
 - Handles: Virtual Environment • Dependency Installation • Model Downloads
 
@@ -73,6 +75,27 @@ Recommended Method
 
 ```
 
+## 📥 HuggingFace 模型下载命令参考
+
+以下命令可用于手动下载相关模型（需先安装 huggingface-cli 工具）：
+
+```bash
+# SD3.5 Large
+huggingface-cli download "stabilityai/stable-diffusion-3.5-large" --local-dir sd3.5L/
+
+# SD3.5 Medium
+huggingface-cli download "stabilityai/stable-diffusion-3.5-medium" --local-dir sd3.5M/
+
+# FLUX.1-dev
+huggingface-cli download "black-forest-labs/FLUX.1-dev" --local-dir flux_models/dev/
+
+# Flux Fill NF4
+huggingface-cli download "lrzjason/flux-fill-nf4" --local-dir flux_models/fill/ 
+
+# Flux Kontext NF4
+huggingface-cli download "lrzjason/flux-kontext-nf4" --local-dir flux_models/kontext/
+```
+
 ### Folder Structure
 <div align="center">
   <table>
@@ -96,6 +119,24 @@ Recommended Method
 | Flux Fill       | `python ui_flux_fill.py` | Requires diffusers>=0.32.0, 24GB VRAM Recommended |
 | Kolors          | `python ui.py`           | Needs [Fixed VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix) |
 | SD3.5 Large     | `python ui_sd35.py`      | 24GB VRAM Recommended            |
+
+### 🎯 快速启动脚本
+项目提供了便捷的启动脚本，位于 `scripts/` 目录：
+
+**Windows 用户:**
+```bash
+scripts/run.bat              # 启动 Flux Fill
+scripts/run_slider.bat       # 启动 Slider
+scripts/run_with_venv.bat    # 启动 Kolors (带虚拟环境)
+```
+
+**Linux/macOS 用户:**
+```bash
+chmod +x scripts/*.sh        # 添加执行权限
+scripts/run.sh               # 启动 Flux Fill
+scripts/run_slider.sh        # 启动 Slider
+scripts/run_with_venv.sh     # 启动 Kolors (带虚拟环境)
+```
 
 ## 🔧 Parameter Configuration Guide
 [![CivitAI Article](https://img.shields.io/badge/📖-Detailed_Parameter_Guide-purple)](https://civitai.com/articles/7743)
