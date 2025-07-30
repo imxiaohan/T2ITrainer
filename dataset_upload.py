@@ -7,6 +7,32 @@ import re
 from pathlib import Path
 import gradio as gr
 
+# Load translations
+def load_translations():
+    import sys
+    import os
+    translations = {}
+    for lang in ['zh', 'en']:
+        file_path = os.path.join(os.path.dirname(__file__), 'i18n', f'{lang}.json')
+        if os.path.exists(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                translations[lang] = json.load(f)
+        else:
+            print(f"Warning: Translation file {file_path} not found.")
+    return translations
+
+TRANSLATIONS = load_translations()
+current_language = 'en'  # Default to English
+
+def get_text(key):
+    """Get text in current language"""
+    return TRANSLATIONS.get(current_language, {}).get(key, key)
+
+def set_language(lang):
+    """Set current language"""
+    global current_language
+    current_language = lang
+
 class DatasetUploader:
     def __init__(self, datasets_dir="datasets"):
         self.datasets_dir = Path(datasets_dir)
@@ -50,7 +76,7 @@ class DatasetUploader:
                     text_files.append(file)
         
         if not image_files:
-            return False, "No image files found in dataset"
+            return False, get_text("no_image_files")
         
         # Check for kontext paired format (XX_R.xxx, XX_T.xxx files)
         kontext_pattern = re.compile(r'^(\d+)_[RT]\.(png|jpg|jpeg|webp)$', re.IGNORECASE)
@@ -74,7 +100,7 @@ class DatasetUploader:
                     missing_pairs.append(base)
             
             if missing_pairs:
-                return False, f"Kontext format: missing R/T pairs for bases: {missing_pairs}"
+                return False, f"{get_text('missing_rt_pairs')}: {missing_pairs}"
             
             # Check for corresponding text files for T images
             kontext_texts = [f for f in text_files if re.match(r'^\d+_T\.txt$', f.name, re.IGNORECASE)]
@@ -82,14 +108,14 @@ class DatasetUploader:
             missing_texts = [txt for txt in expected_texts if not any(f.name.lower() == txt.lower() for f in kontext_texts)]
             
             if missing_texts:
-                return False, f"Kontext format: missing text files: {missing_texts}"
+                return False, f"{get_text('missing_text_files_kontext')}: {missing_texts}"
             
-            return True, f"Valid kontext dataset: {len(base_names)} pairs ({len(kontext_images)} images, {len(kontext_texts)} text files)"
+            return True, f"{get_text('valid_kontext_dataset')}: {len(base_names)} pairs ({len(kontext_images)} images, {len(kontext_texts)} text files)"
         
         else:
             # Standard format - validate image-text pairs
             if not text_files:
-                return False, "No text/caption files found in dataset"
+                return False, get_text("no_text_files")
             
             # Check if images have corresponding text files
             image_stems = {img.stem for img in image_files}
@@ -97,9 +123,9 @@ class DatasetUploader:
             
             missing_texts = image_stems - text_stems
             if missing_texts:
-                return False, f"Missing text files for images: {len(missing_texts)} images without captions"
+                return False, f"{get_text('missing_text_files')}: {len(missing_texts)} images without captions"
             
-            return True, f"Valid standard dataset: {len(image_files)} images, {len(text_files)} text files"
+            return True, f"{get_text('valid_standard_dataset')}: {len(image_files)} images, {len(text_files)} text files"
     
     def extract_archive(self, archive_path, extract_to):
         """Extract archive file to specified directory"""
@@ -114,19 +140,19 @@ class DatasetUploader:
                 with tarfile.open(archive_path, 'r:*') as tar_ref:
                     tar_ref.extractall(extract_to)
             else:
-                return False, "Unsupported archive format"
+                return False, get_text("unsupported_format")
             
-            return True, "Archive extracted successfully"
+            return True, get_text("archive_extracted_successfully")
         except Exception as e:
-            return False, f"Error extracting archive: {str(e)}"
+            return False, f"{get_text('error_extracting_archive')}: {str(e)}"
     
     def upload_dataset(self, file_obj, dataset_name):
         """Upload and process a dataset archive"""
         if not file_obj:
-            return None, "No file provided"
+            return None, get_text("no_file_provided")
         
         if not dataset_name:
-            return None, "Please provide a dataset name"
+            return None, get_text("please_provide_dataset_name")
         
         # Handle gradio file object
         if hasattr(file_obj, 'name'):
@@ -138,7 +164,7 @@ class DatasetUploader:
         file_extension = ''.join(file_path.suffixes).lower()
         if file_extension not in self.supported_formats:
             supported = ', '.join(self.supported_formats)
-            return None, f"Unsupported format. Supported formats: {supported}"
+            return None, f"{get_text('unsupported_format')}. {get_text('supported_formats')}: {supported}"
         
         # Get next sequence number
         sequence_num = self.get_next_sequence_number(dataset_name)
@@ -184,7 +210,7 @@ class DatasetUploader:
             is_valid, validation_message = self.validate_dataset_structure(dataset_path)
             if not is_valid:
                 shutil.rmtree(dataset_path)
-                return None, f"Dataset validation failed: {validation_message}"
+                return None, f"{get_text('dataset_validation_failed')}: {validation_message}"
             
             # Return the path to be used for train_data_dir
             return str(dataset_path), f"Successfully uploaded {dataset_name}_{sequence_num:03d}: {validation_message}"
@@ -192,7 +218,7 @@ class DatasetUploader:
         except Exception as e:
             if dataset_path.exists():
                 shutil.rmtree(dataset_path)
-            return None, f"Error processing dataset: {str(e)}"
+            return None, f"{get_text('error_processing_dataset')}: {str(e)}"
 
 # Global instance
 dataset_uploader = DatasetUploader()
@@ -204,27 +230,25 @@ def upload_dataset_interface(file_input, dataset_name):
 
 def add_dataset_upload_tab(demo):
     """Add dataset upload tab to the existing Gradio interface"""
-    with gr.Tab("Dataset Upload"):
-        gr.Markdown("""
-        ## Upload Training Dataset
-        Upload your dataset archive (zip, tar, tar.gz, etc.) and it will be automatically extracted and validated.
-        """)
+    with gr.Tab(get_text("dataset_upload_tab")) as tab:
+        md_title = gr.Markdown(get_text("upload_training_dataset"))
+        md_description = gr.Markdown(get_text("upload_dataset_description"))
         
         with gr.Row():
             with gr.Column():
                 file_input = gr.File(
-                    label="Dataset Archive",
+                    label=get_text("dataset_archive"),
                     file_types=[".zip", ".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".tar.xz", ".txz"]
                 )
                 dataset_name = gr.Textbox(
-                    label="Dataset Name",
-                    placeholder="Enter a name for this dataset (e.g., my_dataset)"
+                    label=get_text("dataset_name"),
+                    placeholder=get_text("dataset_name_placeholder")
                 )
-                upload_btn = gr.Button("Upload Dataset", variant="primary")
+                upload_btn = gr.Button(get_text("upload_dataset_btn"), variant="primary")
             
             with gr.Column():
-                upload_output = gr.Textbox(label="Upload Status", interactive=False)
-                dataset_path = gr.Textbox(label="Dataset Path", interactive=False)
+                upload_output = gr.Textbox(label=get_text("upload_status"), interactive=False)
+                dataset_path = gr.Textbox(label=get_text("dataset_path"), interactive=False)
                 
         upload_btn.click(
             fn=upload_dataset_interface,
@@ -232,20 +256,11 @@ def add_dataset_upload_tab(demo):
             outputs=[dataset_path, upload_output]
         )
         
-        gr.Markdown("""
-        ### Dataset Requirements:
-        - Archive must contain image files (jpg, jpeg, png, bmp, webp) and corresponding text files (txt, caption)
-        - Each image should have a text file with the same name containing the caption
-        - Example structure:
-          ```
-          dataset/
-          ├── image1.jpg
-          ├── image1.txt
-          ├── image2.png
-          ├── image2.txt
-          └── ...
-          ```
-        """)
+        md_requirements = gr.Markdown(get_text("dataset_requirements"))
+        md_requirements_content = gr.Markdown(get_text("dataset_requirements_content"))
+        
+    # Return all components that need to be updated during language switch
+    return tab, md_title, md_description, file_input, dataset_name, upload_btn, upload_output, dataset_path, md_requirements, md_requirements_content
 
 if __name__ == "__main__":
     # Test the uploader
