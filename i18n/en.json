@@ -81,5 +81,15 @@
   "upload_status": "Upload Status",
   "dataset_path": "Dataset Path",
   "dataset_requirements": "### Dataset Requirements:",
-  "dataset_requirements_content": "Archive must contain image files (jpg, jpeg, png, bmp, webp) and corresponding text files (txt, caption)\nEach image should have a text file with the same name containing the caption\nExample structure:\n```\ndataset/\n├── image1.jpg\n├── image1.txt\n├── image2.png\n├── image2.txt\n└── ...\n```"
+  "dataset_requirements_content": "Archive must contain image files (jpg, jpeg, png, bmp, webp) and corresponding text files (txt, caption)\n\nSupported formats:\n1. Standard: Each image has a text file with the same name\n2. Kontext: 01_R.png + 01_T.png + 01_T.txt (paired reference/target)\n3. FG Format: 01_F.png + 01_G.png + 01_F.txt (paired F/G images with F text)\n\nExample structures:\n```\nStandard format:\ndataset/\n├── image1.jpg\n├── image1.txt\n└── ...\n\nKontext format:\ndataset/\n├── 01_R.png\n├── 01_T.png\n├── 01_T.txt\n├── 02_R.png\n├── 02_T.png\n├── 02_T.txt\n└── ...\n\nFG format:\ndataset/\n├── 01_F.png\n├── 01_G.png\n├── 01_F.txt\n├── 02_F.png\n├── 02_G.png\n├── 02_F.txt\n└── ...\n```",
+  "no_image_files": "No image files found",
+  "no_text_files": "No text files found",
+  "missing_text_files": "Missing text files",
+  "valid_standard_dataset": "Valid standard dataset",
+  "valid_kontext_dataset": "Valid kontext dataset",
+  "missing_rt_pairs": "Missing R/T pairs",
+  "missing_text_files_kontext": "Missing text files for kontext format",
+  "valid_fg_dataset": "Valid FG dataset",
+  "missing_fg_pairs": "Missing F/G pairs",
+  "missing_text_files_fg": "Missing text files for F images"
 }

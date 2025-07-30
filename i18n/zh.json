@@ -81,5 +81,15 @@
   "upload_status": "上传状态",
   "dataset_path": "数据集路径",
   "dataset_requirements": "### 数据集要求：",
-  "dataset_requirements_content": "压缩包必须包含图像文件（jpg、jpeg、png、bmp、webp）和对应的文本文件（txt、caption）\\n每张图像应有相同名称的文本文件包含描述\\n示例结构：\\n```\\ndataset/\\n├── image1.jpg\\n├── image1.txt\\n├── image2.png\\n├── image2.txt\\n└── ...\\n```"
+  "dataset_requirements_content": "压缩包必须包含图像文件（jpg、jpeg、png、bmp、webp）和对应的文本文件（txt、caption）\n\n支持的格式：\n1. 标准：每张图像有相同名称的文本文件\n2. Kontext：01_R.png + 01_T.png + 01_T.txt（配对参考/目标图像）\n3. FG格式：01_F.png + 01_G.png + 01_F.txt（配对F/G图像，F有文本）\n\n示例结构：\n```\n标准格式：\ndataset/\n├── image1.jpg\n├── image1.txt\n└── ...\n\nKontext格式：\ndataset/\n├── 01_R.png\n├── 01_T.png\n├── 01_T.txt\n├── 02_R.png\n├── 02_T.png\n├── 02_T.txt\n└── ...\n\nFG格式：\ndataset/\n├── 01_F.png\n├── 01_G.png\n├── 01_F.txt\n├── 02_F.png\n├── 02_G.png\n├── 02_F.txt\n└── ...\n```",
+  "no_image_files": "未找到图像文件",
+  "no_text_files": "未找到文本文件",
+  "missing_text_files": "缺少文本文件",
+  "valid_standard_dataset": "标准数据集有效",
+  "valid_kontext_dataset": "Kontext数据集有效",
+  "missing_rt_pairs": "缺少R/T配对",
+  "missing_text_files_kontext": "Kontext格式缺少文本文件",
+  "valid_fg_dataset": "FG数据集有效",
+  "missing_fg_pairs": "缺少F/G配对",
+  "missing_text_files_fg": "F图像缺少文本文件"
 }

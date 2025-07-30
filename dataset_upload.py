@@ -55,9 +55,10 @@ class DatasetUploader:
     def validate_dataset_structure(self, dataset_path):
         """Validate if the dataset has the required structure
         
-        Supports both standard format and kontext paired format:
+        Supports multiple formats:
         - Standard: image1.jpg + image1.txt
         - Kontext: 01_R.png + 01_T.png + 01_T.txt (paired reference and target images)
+        - FG Format: 01_F.png + 01_G.png + 01_F.txt (paired F and G images with F text)
         """
         dataset_path = Path(dataset_path)
         
@@ -81,6 +82,10 @@ class DatasetUploader:
         # Check for kontext paired format (XX_R.xxx, XX_T.xxx files)
         kontext_pattern = re.compile(r'^(\d+)_[RT]\.(png|jpg|jpeg|webp)$', re.IGNORECASE)
         kontext_images = [f for f in image_files if kontext_pattern.match(f.name)]
+        
+        # Check for FG paired format (XX_F.xxx, XX_G.xxx files)
+        fg_pattern = re.compile(r'^(\d+)_[FG]\.(png|jpg|jpeg|webp)$', re.IGNORECASE)
+        fg_images = [f for f in image_files if fg_pattern.match(f.name)]
         
         if kontext_images:
             # Kontext format detected - validate paired structure
@@ -111,6 +116,36 @@ class DatasetUploader:
                 return False, f"{get_text('missing_text_files_kontext')}: {missing_texts}"
             
             return True, f"{get_text('valid_kontext_dataset')}: {len(base_names)} pairs ({len(kontext_images)} images, {len(kontext_texts)} text files)"
+
+        elif fg_images:
+            # FG format detected - validate paired structure
+            base_names = set()
+            for img in fg_images:
+                match = fg_pattern.match(img.name)
+                if match:
+                    base_names.add(match.group(1))
+            
+            # Check for required pairs: each number should have _F and _G files
+            missing_pairs = []
+            for base in base_names:
+                has_f = any(f.name.lower() == f"{base}_f.png" or f"{base}_f.jpg" for f in fg_images)
+                has_g = any(f.name.lower() == f"{base}_g.png" or f"{base}_g.jpg" for f in fg_images)
+                
+                if not (has_f and has_g):
+                    missing_pairs.append(base)
+            
+            if missing_pairs:
+                return False, f"{get_text('missing_fg_pairs')}: {missing_pairs}"
+            
+            # Check for corresponding text files for F images (each _F must have _F.txt)
+            fg_texts = [f for f in text_files if re.match(r'^\d+_F\.txt$', f.name, re.IGNORECASE)]
+            expected_texts = [f"{base}_F.txt" for base in base_names]
+            missing_texts = [txt for txt in expected_texts if not any(f.name.lower() == txt.lower() for f in fg_texts)]
+            
+            if missing_texts:
+                return False, f"{get_text('missing_text_files_fg')}: {missing_texts}"
+            
+            return True, f"{get_text('valid_fg_dataset')}: {len(base_names)} pairs ({len(fg_images)} images, {len(fg_texts)} text files)"
         
         else:
             # Standard format - validate image-text pairs
