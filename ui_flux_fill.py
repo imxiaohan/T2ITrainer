@@ -4,6 +4,7 @@ import subprocess
 import json
 import sys
 import os
+from dataset_upload import add_dataset_upload_tab
 
 # ===== 语言翻译系统 =====
 # 翻译字典 - 包含所有需要翻译的文本
@@ -81,7 +82,20 @@ TRANSLATIONS = {
         'slider': '滑块训练相关',
         'use_two_captions': '使用两对应文本标注',
         'slider_positive_scale': '滑块正向目标强度',
-        'slider_negative_scale': '滑块负面目标强度'
+        'slider_negative_scale': '滑块负面目标强度',
+        
+        'dataset_upload': '数据集上传',
+        'upload_training_dataset': '## 上传训练数据集',
+        'upload_dataset_description': '上传您的数据集压缩包（zip、tar、tar.gz等），系统将自动解压和验证。',
+        'dataset_archive': '数据集压缩包',
+        'dataset_name': '数据集名称',
+        'dataset_name_placeholder': '为此数据集输入名称（例如：my_dataset）',
+        'upload_dataset_btn': '上传数据集',
+        'upload_status': '上传状态',
+        'dataset_path': '数据集路径',
+        
+        'dataset_requirements': '### 数据集要求：',
+        'dataset_requirements_content': '压缩包必须包含图像文件（jpg、jpeg、png、bmp、webp）和对应的文本文件（txt、caption）\\n每张图像应有相同名称的文本文件包含描述\\n示例结构：\\n```\\ndataset/\\n├── image1.jpg\\n├── image1.txt\\n├── image2.png\\n├── image2.txt\\n└── ...\\n```'
     },
     'en': {
         'title': '## Lora Training',
@@ -157,7 +171,20 @@ TRANSLATIONS = {
         'slider': 'Slider Related',
         'use_two_captions': 'Use two captions for each direction',
         'slider_positive_scale': 'Slider positive scale',
-        'slider_negative_scale': 'Slider negative scale'
+        'slider_negative_scale': 'Slider negative scale',
+        
+        'dataset_upload': 'Dataset Upload',
+        'upload_training_dataset': '## Upload Training Dataset',
+        'upload_dataset_description': 'Upload your dataset archive (zip, tar, tar.gz, etc.) and it will be automatically extracted and validated.',
+        'dataset_archive': 'Dataset Archive',
+        'dataset_name': 'Dataset Name',
+        'dataset_name_placeholder': 'Enter a name for this dataset (e.g., my_dataset)',
+        'upload_dataset_btn': 'Upload Dataset',
+        'upload_status': 'Upload Status',
+        'dataset_path': 'Dataset Path',
+        
+        'dataset_requirements': '### Dataset Requirements:',
+        'dataset_requirements_content': 'Archive must contain image files (jpg, jpeg, png, bmp, webp) and corresponding text files (txt, caption)\\nEach image should have a text file with the same name containing the caption\\nExample structure:\\n```\\ndataset/\\n├── image1.jpg\\n├── image1.txt\\n├── image2.png\\n├── image2.txt\\n└── ...\\n```'
     }
 }
 
@@ -733,6 +760,9 @@ with gr.Blocks() as demo:
         ]
     )
 
+    # 添加数据集上传标签页
+    add_dataset_upload_tab(demo)
+    
 # 启动界面
 if __name__ == "__main__":
     demo.launch()
