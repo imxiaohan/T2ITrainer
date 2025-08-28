@@ -169,7 +169,7 @@ def parse_args(input_args=None):
     parser.add_argument(
         "--save_name",
         type=str,
-        default="flux_",
+        default="qwen_",
         help=(
             "save name prefix for saving checkpoints"
         ),

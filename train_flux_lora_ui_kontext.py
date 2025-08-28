@@ -554,23 +554,6 @@ def parse_args(input_args=None):
         default="config.json",
         help="Path to the config file.",
     )
-    parser.add_argument(
-        "--use_two_captions",
-        action="store_true",
-        help="Use _T caption and _R caption to train each direction",
-    )
-    parser.add_argument(
-        "--slider_positive_scale",
-        type=float,
-        default=1.0,
-        help="Slider Training positive target scale",
-    )
-    parser.add_argument(
-        "--slider_negative_scale",
-        type=float,
-        default=-1.0,
-        help="Slider Training negative target scale",
-    )
     
     
     if input_args is not None:
