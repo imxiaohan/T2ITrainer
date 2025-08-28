@@ -11,7 +11,7 @@ python train_qwen_image.py \
     --pretrained_model_name_or_path="Qwen/Qwen-Image" \
     --train_data_dir="./datasets/images" \
     --output_dir="./output/qwen_lora" \
-    --rank=32 \
+    --rank=16 \
     --repeats=10 \
     --resolution=1024 \
     --train_batch_size=1 \
@@ -39,11 +39,11 @@ python train_qwen_image.py --config_path=config_qwen_single.json
 | 参数名 | 参数说明 | 默认值 | 可选值 |
 |-----------|-------------|---------------|-----------------|
 | `--train_batch_size` | 训练数据加载器的批次大小（每个设备） | `1` | 正整数 |
-| `--num_train_epochs` | 训练轮数 | `1` | 正整数 |
+| `--num_train_epochs` | 训练轮数 | `10` | 正整数 |
 | `--learning_rate` | 初始学习率（热身期后） | `1e-4` | 正浮点数 |
 | `--gradient_accumulation_steps` | 执行反向/更新步骤前累积的更新步数 | `1` | 正整数 |
 | `--gradient_checkpointing` | 是否使用梯度检查点以节省内存 | `False` | `True`, `False` |
-| `--repeats` | 训练数据的重复次数 | `1` | 正整数 |
+| `--repeats` | 训练数据的重复次数 | `10` | 正整数 |
 
 ### 优化器参数
 
@@ -59,7 +59,7 @@ python train_qwen_image.py --config_path=config_qwen_single.json
 
 | 参数名 | 参数说明 | 默认值 | 可选值 |
 |-----------|-------------|---------------|-----------------|
-| `--lr_scheduler` | 要使用的调度器类型 | `cosine` | `linear`, `cosine`, `cosine_with_restarts`, `polynomial`, `constant`, `constant_with_warmup` |
+| `--lr_scheduler` | 要使用的调度器类型 | `constant` | `linear`, `cosine`, `cosine_with_restarts`, `polynomial`, `constant`, `constant_with_warmup` |
 | `--lr_warmup_steps` | 学习率调度器的预热步数 | `50` | 非负整数 |
 | `--cosine_restarts` | cosine_with_restarts调度器的重启次数 | `1` | 正整数 |
 
@@ -67,7 +67,7 @@ python train_qwen_image.py --config_path=config_qwen_single.json
 
 | 参数名 | 参数说明 | 默认值 | 可选值 |
 |-----------|-------------|---------------|-----------------|
-| `--rank` | LoRA更新矩阵的维度 | `4` | 正整数 |
+| `--rank` | LoRA更新矩阵的维度 | `16` | 正整数 |
 | `--lora_layers` | 应用LoRA训练的Transformer模块 | `None` | 逗号分隔的模块名称列表 |
 | `--freeze_transformer_layers` | 冻结的Transformer层数 | `""` | 逗号分隔的层索引 |
 
@@ -94,7 +94,7 @@ python train_qwen_image.py --config_path=config_qwen_single.json
 
 | 参数名 | 参数说明 | 默认值 | 可选值 |
 |-----------|-------------|---------------|-----------------|
-| `--resolution` | 训练的默认分辨率 | `512` | `512`, `1024` |
+| `--resolution` | 训练的默认分辨率 | `1024` | `512`, `1024` |
 | `--caption_dropout` | 标题丢弃比例 | `0.1` | 0-1之间的浮点数 |
 
 ### 高级训练参数
@@ -111,7 +111,7 @@ python train_qwen_image.py --config_path=config_qwen_single.json
 
 | 参数名 | 参数说明 | 默认值 | 可选值 |
 |-----------|-------------|---------------|-----------------|
-| `--seed` | 可重复训练的随机种子 | `42` | 任意整数 |
+| `--seed` | 可重复训练的随机种子 | `4321` | 任意整数 |
 | `--mixed_precision` | 混合精度训练类型 | `None` | `bf16`, `fp8` |
 | `--logging_dir` | TensorBoard日志目录 | `logs` | 任意有效的目录路径 |
 | `--report_to` | 报告结果和日志的集成平台 | `wandb` | `tensorboard`, `wandb`, `comet_ml`, `all` |
@@ -123,9 +123,6 @@ python train_qwen_image.py --config_path=config_qwen_single.json
 |-----------|-------------|---------------|-----------------|
 | `--recreate_cache` | 重新创建所有缓存文件 | `False` | `True`, `False` |
 | `--blocks_to_swap` | 块交换的块数（根据VRAM设置） | `10` | 10-20之间的整数 |
-
-
-
 | `--noise_offset` | 初始噪声的偏移量 | `0.01` | 浮点数 |
 
 
