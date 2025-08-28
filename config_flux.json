@@ -12,7 +12,7 @@
     "gradient_accumulation_steps": 4,
     "gradient_checkpointing": true,
     "learning_rate": 1e-4,
-    "lr_scheduler": "cosine",
+    "lr_scheduler": "constant",
     "cosine_restarts": 1,
     "lr_warmup_steps": 50,
     "optimizer": "AdamW",

@@ -54,7 +54,7 @@ python train_flux_lora_ui_kontext.py --config_path=config_flux.json
 
 | 参数名 | 参数说明 | 默认值 | 可选值 |
 |-----------|-------------|---------------|-----------------|
-| `--lr_scheduler` | 要使用的调度器类型 | `cosine` | `linear`, `cosine`, `cosine_with_restarts`, `polynomial`, `constant`, `constant_with_warmup` |
+| `--lr_scheduler` | 要使用的调度器类型 | `constant` | `linear`, `cosine`, `cosine_with_restarts`, `polynomial`, `constant`, `constant_with_warmup` |
 | `--lr_warmup_steps` | 学习率调度器的预热步数 | `50` | 非负整数 |
 | `--cosine_restarts` | cosine_with_restarts调度器的重启次数 | `1` | 正整数 |
 
@@ -147,7 +147,7 @@ python train_flux_lora_ui_kontext.py --config_path=config_flux.json
     "gradient_accumulation_steps": 4,
     "gradient_checkpointing": true,
     "learning_rate": 1e-4,
-    "lr_scheduler": "cosine",
+    "lr_scheduler": "constant",
     "cosine_restarts": 1,
     "lr_warmup_steps": 50,
     "optimizer": "AdamW",
