@@ -1,4 +1,4 @@
-# Flux LoRA UI Kontext 训练参数说明文档
+# Flux Kontext LoRA 训练参数说明文档
 
 本文档详细介绍了 `train_flux_lora_ui_kontext.py` 训练脚本的所有参数，用于训练Flux Kontext模型的LoRA权重。
 
