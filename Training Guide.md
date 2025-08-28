@@ -10,11 +10,11 @@ T2ITrainer 是一个功能完整的文本到图像模型 LoRA (Low-Rank Adaptati
 | train_qwen_image.py | Qwen图像模型的LoRA权重 | `ui_flux_fill.py` | [训练参数](doc/training/train_qwen_image_parameters.md) |
 | train_qwen_image_edit.py | Qwen图像编辑模型的LoRA权重 | `ui_flux_fill.py` | [训练参数](doc/training/train_qwen_image_edit_parameters.md) |
 | train_flux_lora_ui_kontext_new.py | Flux Kontext模型的LoRA权重(新版支持多图配置) | `ui_flux_fill.py` | [训练参数](doc/training/train_flux_kontext_lora_new_parameters.md) |
-| train_flux_lora_ui_kontext.py | Flux Kontext模型的LoRA权重 | `ui_flux_fill.py` | [训练参数](doc/training/train_flux_lora_kontext_parameters.md) |
- train_flux_lora_ui.py | 555 | `ui_flux_fill.py` | [训练参数] |
-| train_flux_lora_ui_kontext_slider.py | 444 | `ui_flux_fill.py` | [训练参数] |
-| train_flux_lora_ui_with_mask.py | 555 | `ui_flux_fill.py` | [训练参数] |
-| train_sd3_lora_ui.py | 666 | `ui_sd35.py` | [训练参数] |
+| train_flux_lora_ui_kontext.py | Flux Kontext模型的LoRA权重 | `ui_flux_fill.py` | [训练参数](doc/training/train_flux_kontext_lora_parameters.md) |
+ train_flux_lora_ui.py | - | `ui_flux_fill.py` | [训练参数] |
+| train_flux_lora_ui_kontext_slider.py | - | `ui_flux_fill.py` | [训练参数] |
+| train_flux_lora_ui_with_mask.py | - | `ui_flux_fill.py` | [训练参数] |
+| train_sd3_lora_ui.py | - | `ui_sd35.py` | [训练参数] |
 | train_kolors_lora_ui.py | Kolors标准LoRA训练 | `ui.py` | [训练参数](doc/training/train_kolors_lora_parameters.md) |
 | train_kolors_slider.py | 专门用于概念编辑的滑块训练脚本，通过正负样本对来训练Kolors的LoRA模型 | `ui_slider.py` | [训练参数](doc/training/train_kolors_slider_parameters.md) |
 | train_hunyuan_lora_ui.py | 777 | - | [训练参数] |
